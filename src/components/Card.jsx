@@ -12,16 +12,23 @@ const Card = (props) => {
         boxShadow:'0 4px 6px rgba(0, 0, 0, 0.1)',
         width: '300px',
       }}
-    >
-      <img 
-        src={productInfo.thumbnailImageUrl} 
-        alt={productInfo.name}
+    > 
+      <div
         style={{
-          borderTopLeftRadius: '1rem',
-          borderTopRightRadius: '1rem',
           width: '100%',
+          height: '450px',
         }}
-      />
+      >
+        <img 
+          src={productInfo.thumbnailImageUrl} 
+          alt={productInfo.name}
+          style={{
+            borderTopLeftRadius: '1rem',
+            borderTopRightRadius: '1rem',
+            width: '100%',
+          }}
+        />
+      </div>
       <div style={{padding: '0.75rem', display: 'flex', flexDirection: 'column'}}>
         <p
           style={{
