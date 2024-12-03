@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css'
-import { Button, TextField } from '@mui/material'
+import { Button, TextField, Grid2 } from '@mui/material'
 import logo from './assets/logo.png'
 import Card from './components/Card'
 import { fetchData } from './utils/apiRequest'
@@ -23,6 +23,10 @@ const App = () => {
       .catch(error => console.error(error))
   }, [])
 
+  const handlePickOneForMe = () => {
+    setSearchText('shoes')  
+  }
+
   return (
     <div>
       <div 
@@ -38,19 +42,37 @@ const App = () => {
         }}
       >
         <img src={logo} alt="logo" style={{ width: '200px', height: '100px' }} />
-        <div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           <TextField
             type="text"
             size="small"
-            placeholder="Search..."
+            placeholder="Search for products"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             style={{ marginRight: '25px' }}
           />
           <Button variant="contained" color="primary">Search</Button>
+          <p style={{ margin: '0 10px' }}>or</p>
+          <Button variant="contained" color="secondary" onClick={handlePickOneForMe}>Pick one for me</Button>
         </div>
       </div>
-      <div className='content'>
+      <div 
+        className='content'
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          margin: 'auto 0',
+        }}
+      >
         <div 
           style={{
             display: 'flex',
@@ -65,21 +87,34 @@ const App = () => {
           <div>Search Result for {searchText}</div>
           <div>Page {pageInfo.currentPage} of {pageInfo.totalPages}</div>
         </div>
-        <div
+        <Grid2 
+          container 
+          spacing={2}
+          alignItems="center"
+          justifyContent="center"
           style={{
-            display: 'flex',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
             padding: '20px',
-            margin: 'auto 0'
+            margin: 'auto 0',
+            maxWidth: '1500px',
           }}
         >
           {currentProductsList.map((product, index) => {
-            return <Card key={index} productInfo={product} />
+            return (
+              <Grid2 
+                item 
+                key={index}
+                style={{
+                  padding: '10px',
+                  with: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <Card productInfo={product} />
+              </Grid2>
+            )
           })}
-        </div>
+        </Grid2>
       </div>
     </div>
   )
