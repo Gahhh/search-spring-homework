@@ -2,7 +2,33 @@ import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
 const Card = (props) => {
-  const { productInfo } = props;
+  const { productInfo, handleAddToCart } = props;
+
+  const displayPrice = () => {
+    if ('msrp' in productInfo) {
+      if (productInfo.msrp > productInfo.price) {
+        return (
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <p style={{fontSize: '1rem', fontWeight: '500', color: '#9CA3AF', textDecoration: 'line-through'}}>${productInfo.msrp}</p>
+            <p style={{fontSize: '1.25rem', fontWeight: '500', color: '#111827', marginLeft: '0.5rem'}}>${productInfo.price}</p>
+          </div>
+        )
+      } else {
+        return (
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <p style={{fontSize: '1.25rem', fontWeight: '500', color: '#111827'}}>${productInfo.price}</p>
+          </div>
+        )
+      }
+    } else {
+      return (
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+          <p style={{fontSize: '1.25rem', fontWeight: '500', color: '#111827'}}>${productInfo.price}</p>
+        </div>
+      )
+    }
+  }
+  
   return (
     <div 
       style={{
@@ -56,12 +82,13 @@ const Card = (props) => {
           color: '#111827'
         }}
       >
-        ${productInfo.price}
+        {displayPrice()}
       </div>
       <Button 
         variant="contained" 
         color="primary"
         size='small'
+        onClick={() => handleAddToCart()}
         style={{
           width: '100%',
           borderBottomLeftRadius: '1rem',
@@ -84,6 +111,7 @@ Card.propTypes = {
     name: PropTypes.string.isRequired,
     price: PropTypes.string.isRequired,
   }).isRequired,
+  handleAddToCart: PropTypes.func.isRequired,
 };
 
 export default Card;

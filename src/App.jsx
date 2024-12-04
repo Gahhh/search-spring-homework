@@ -1,10 +1,12 @@
 import React from 'react'
 import './App.css'
-import { Button, TextField, Grid2, IconButton, CircularProgress } from '@mui/material'
+import { Button, TextField, Grid2, IconButton } from '@mui/material'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import logo from './assets/logo.png'
 import Card from './components/Card'
+import ShoppingCartBadge from './components/ShoppingCartBadge'
+import Loading from './components/Loading'
 import { fetchData } from './utils/apiRequest'
 import _ from 'lodash'
 
@@ -13,24 +15,37 @@ const App = () => {
   const [textInput, setTextInput] = React.useState('')
   const [searchedText, setSearchedText] = React.useState('')
   const [currentProductsList, setCurrentProductsList] = React.useState([])
-  const [currentPage, setCurrentPage] = React.useState(1)
+  const [currentPage, setCurrentPage] = React.useState(0)
   const [nextPage, setNextPage] = React.useState(2)
   const [prevPage, setPrevPage] = React.useState(0)
   const [totalPages, setTotalPages] = React.useState(0)
+  const [count, setCount] = React.useState(0)
   const [loading, setLoading] = React.useState(false)
+  const [isEmptyResults, setIsEmptyResults] = React.useState(false)
 
   const getProducts = (page) => {
     setLoading(true)
     fetchData(textInput, page)
       .then(response => response.json())
       .then(data => {
-        setCurrentProductsList(data.results)
-        setSearchedText(textInput)
-        setCurrentPage(data.pagination.currentPage)
-        setNextPage(data.pagination.nextPage)
-        setPrevPage(data.pagination.previousPage)
-        setTotalPages(data.pagination.totalPages)
-        setLoading(false)
+        if (data.results.length === 0) {
+          setIsEmptyResults(true)
+          setCurrentProductsList([])
+          setCurrentPage(0)
+          setNextPage(2)
+          setPrevPage(0)
+          setTotalPages(0)
+          setLoading(false)
+        } else {
+          setCurrentProductsList(data.results)
+          setSearchedText(textInput)
+          setCurrentPage(data.pagination.currentPage)
+          setNextPage(data.pagination.nextPage)
+          setPrevPage(data.pagination.previousPage)
+          setTotalPages(data.pagination.totalPages)
+          setIsEmptyResults(false)
+          setLoading(false)
+        }
       })
       .catch(error => {
         console.error(error)
@@ -44,12 +59,16 @@ const App = () => {
   }, [])
 
   const handlePickOneForMe = () => {
-    const randomSearchText = _.sample(['shoes', 'bags', 'dress', 'hats', 'gloves', 'scarves', 'socks'])
+    const randomSearchText = _.sample(['shoes', 'bags', 'dress', 'hats', 'gloves', 'jeans'])
     setTextInput(randomSearchText)
   }
 
   const handleSearchClick = () => {
     getProducts(1)
+  }
+
+  const handleAddToCart = () => {
+    setCount(count + 1)
   }
 
   return (
@@ -74,21 +93,33 @@ const App = () => {
             alignItems: 'center',
           }}
         >
-          <TextField
-            type="text"
-            size="small"
-            placeholder="Search for products"
-            value={textInput}
-            onChange={(e) => setTextInput(e.target.value)}
-            style={{ marginRight: '15px' }}
-          />
-          <Button variant="contained" color="primary" onClick={handleSearchClick}>Search</Button>
-          <p style={{ margin: '0 10px' }}>or</p>
-          <Button variant="contained" color="secondary" onClick={handlePickOneForMe}>Pick one for me</Button>
+          <div 
+            style={{ 
+              marginRight: '15px',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <TextField
+              type="text"
+              size="small"
+              placeholder="Search for products"
+              value={textInput}
+              onChange={(e) => setTextInput(e.target.value)}
+              style={{ marginRight: '15px' }}
+            />
+            <Button variant="contained" color="primary" onClick={handleSearchClick}>Search</Button>
+            <p style={{ margin: '0 10px' }}>or</p>
+            <Button variant="contained" color="secondary" onClick={handlePickOneForMe}>Pick one for me</Button>
+          </div>
+          <ShoppingCartBadge count={count} />
         </div>
       </div>
-      {loading 
-      ? <div
+      {
+        isEmptyResults && 
+        <div
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -98,12 +129,11 @@ const App = () => {
             height: '80vh',
           }}
         >
-      <CircularProgress 
-        size={100}
-        disableShrink
-      />
-      <p style={{ margin: '20px', fontSize: '25px'}}>Loading products...</p>
-      </div>
+          <p style={{ margin: '20px', fontSize: '25px'}}>No results found. Please try again.</p>
+        </div>
+      }
+      {loading 
+      ? <Loading />
       : <div 
         className='content'
         style={{
@@ -190,7 +220,7 @@ const App = () => {
                   flexDirection: 'column',
                 }}
               >
-                <Card productInfo={product} />
+                <Card productInfo={product} handleAddToCart={handleAddToCart} />
               </Grid2>
             )
           })}
