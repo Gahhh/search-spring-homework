@@ -1,7 +1,17 @@
 # Search Spring Code Challenge - Shopping by Search
-This is a simple search application that allows users to search for products and view the details of a product based on Search Spring APIs.The application is built using Vite + React framework.
+This is a simple search application that allows users to search for products by category and/or keyword. The application is built using React, Vite, and Material-UI.
 
 Online demo: [Shopping by Search](https://tangerine-strudel-b644eb.netlify.app/)
+
+Features:
+- Search for products by category and/or keyword
+- Randomly generated search keywords
+- Add products to the shopping cart
+- Display current page number and total number of pages
+- Ability to go to the next and previous page
+- Ability to go to a specific page number
+- Display MSRP and sale price
+
 
 ## System Requirements
 - Node.js v22.11.0+
