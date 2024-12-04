@@ -53,6 +53,7 @@ const App = () => {
       })
       .catch(error => {
         console.error(error)
+        alert('An error occurred. Please try again.')
         setLoading(false)
       }
     )

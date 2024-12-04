@@ -1,5 +1,7 @@
-# Search Spring Code Challenge
+# Search Spring Code Challenge - Shopping by Search
 This is a simple search application that allows users to search for products and view the details of a product based on Search Spring APIs.The application is built using Vite + React framework.
+
+Online demo: [Shopping by Search](https://tangerine-strudel-b644eb.netlify.app/)
 
 ## System Requirements
 - Node.js v22.11.0+
