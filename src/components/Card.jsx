@@ -5,29 +5,21 @@ const Card = (props) => {
   const { productInfo, handleAddToCart } = props;
 
   const displayPrice = () => {
-    if ('msrp' in productInfo) {
-      if (productInfo.msrp > productInfo.price) {
-        return (
-          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-            <p style={{fontSize: '1rem', fontWeight: '500', color: '#9CA3AF', textDecoration: 'line-through'}}>${productInfo.msrp}</p>
-            <p style={{fontSize: '1.25rem', fontWeight: '500', color: '#111827', marginLeft: '0.5rem'}}>${productInfo.price}</p>
-          </div>
-        )
-      } else {
-        return (
-          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-            <p style={{fontSize: '1.25rem', fontWeight: '500', color: '#111827'}}>${productInfo.price}</p>
-          </div>
-        )
-      }
-    } else {
+    if ('msrp' in productInfo && productInfo.msrp > productInfo.price) {
       return (
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          <p style={{fontSize: '1.25rem', fontWeight: '500', color: '#111827'}}>${productInfo.price}</p>
+          <p style={{fontSize: '1rem', fontWeight: '500', color: '#9CA3AF', textDecoration: 'line-through'}}>${productInfo.msrp}</p>
+          <p style={{fontSize: '1.25rem', fontWeight: '500', color: '#111827', marginLeft: '0.5rem'}}>${productInfo.price}</p>
         </div>
       )
     }
+    return (
+      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+        <p style={{fontSize: '1.25rem', fontWeight: '500', color: '#111827'}}>${productInfo.price}</p>
+      </div>
+    )
   }
+
   
   return (
     <div 

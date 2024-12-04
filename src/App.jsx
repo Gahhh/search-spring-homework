@@ -3,6 +3,8 @@ import './App.css'
 import { Button, TextField, Grid2, IconButton } from '@mui/material'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import logo from './assets/logo.png'
 import Card from './components/Card'
 import ShoppingCartBadge from './components/ShoppingCartBadge'
@@ -13,6 +15,8 @@ import _ from 'lodash'
 const App = () => {
 
   const [textInput, setTextInput] = React.useState('')
+  const [pageNoInput, setPageNoInput] = React.useState('')
+  const [isPageNoValid, setIsPageNoValid] = React.useState(true)
   const [searchedText, setSearchedText] = React.useState('')
   const [currentProductsList, setCurrentProductsList] = React.useState([])
   const [currentPage, setCurrentPage] = React.useState(0)
@@ -71,6 +75,20 @@ const App = () => {
     setCount(count + 1)
   }
 
+  const validatePageNoInput = (pageNo) => {
+    if (pageNo >= 1 && pageNo <= totalPages) {
+      setIsPageNoValid(true)
+    } else {
+      setIsPageNoValid(false)
+    }
+  }
+
+  const handleGoToPageClick = () => {
+    if (isPageNoValid) {
+      getProducts(pageNoInput)
+    }
+  }
+
   return (
     <div>
       <div 
@@ -117,6 +135,8 @@ const App = () => {
           <ShoppingCartBadge count={count} />
         </div>
       </div>
+
+      {/* If the search result is empty, a message should be displayed to the user */}
       {
         isEmptyResults && 
         <div
@@ -132,6 +152,8 @@ const App = () => {
           <p style={{ margin: '20px', fontSize: '25px'}}>No results found. Please try again.</p>
         </div>
       }
+
+      {/* When fetching data from the API, a loading spinner will be displayed instead of the content */}
       {loading 
       ? <Loading />
       : <div 
@@ -196,6 +218,27 @@ const App = () => {
               <ChevronRightIcon />
             </IconButton>
           </div>
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ margin: '20px 0' }}
+              onClick={handleGoToPageClick}
+            >
+              Go to page
+            </Button>
+            <TextField
+              type="number"
+              size="small"
+              style={{ width: '100px', margin: '0 10px' }}
+              value={pageNoInput}
+              onChange={(e) => {
+                setPageNoInput(e.target.value)
+                validatePageNoInput(e.target.value)
+              }}
+              error={!isPageNoValid}
+            />
+          </div>
         </div>
         <Grid2 
           container 
@@ -226,6 +269,28 @@ const App = () => {
           })}
         </Grid2>
         </div>}
+        <div
+          className='footer'
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '20px',
+            margin: 'auto 0',
+            borderTop: '1px solid #ccc',
+            width: '100%',
+          }}
+        >
+          <a href="https://github.com/Gahhh/search-spring-homework" target="_blank" rel="noreferrer">
+            <GitHubIcon style={{ fontSize: '30px', color: '#000' }} />
+          </a>
+          <img src={logo} alt="logo" style={{ width: '100px', height: '50px', margin: '0 100px' }} />
+          <a href="https://www.linkedin.com/in/yu-liang-854067ba/" target="_blank" rel="noreferrer">
+            <LinkedInIcon style={{ fontSize: '30px', color: '#0077b5', marginLeft: '20px' }} />
+          </a>
+          
+        </div>
     </div>
   )
 }
