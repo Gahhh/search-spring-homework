@@ -39,6 +39,8 @@ const App = () => {
           setNextPage(2)
           setPrevPage(0)
           setTotalPages(0)
+          setPageNoInput('')
+          setIsPageNoValid(true)
           setLoading(false)
         } else {
           setCurrentProductsList(data.results)
@@ -48,6 +50,8 @@ const App = () => {
           setPrevPage(data.pagination.previousPage)
           setTotalPages(data.pagination.totalPages)
           setIsEmptyResults(false)
+          setPageNoInput('')
+          setIsPageNoValid(true)
           setLoading(false)
         }
       })
@@ -197,7 +201,7 @@ const App = () => {
               flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
-              padding: '20px 0',
+              padding: '15px 0',
               margin: 'auto',
               width: '100%',
               fontSize: '1.25rem',
@@ -223,7 +227,6 @@ const App = () => {
             <Button
               variant="contained"
               color="primary"
-              style={{ margin: '20px 0' }}
               onClick={handleGoToPageClick}
             >
               Go to page
@@ -239,6 +242,13 @@ const App = () => {
               }}
               error={!isPageNoValid}
             />
+          </div>
+          <div 
+            style={{
+              height: '20px',
+            }}
+          >
+            {isPageNoValid ? '' : <p style={{ color: 'red', margin: '0' }}>Invalid page number</p>}
           </div>
         </div>
         <Grid2 
